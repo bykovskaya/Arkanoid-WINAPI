@@ -111,7 +111,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetObject(hBitMap, sizeof(BITMAP), &bm);
 			SetStretchBltMode(hdc, COLORONCOLOR);
 			SelectObject(hCmpDC, hBitMap);
-			BitBlt(hdc, 0, 0, bm.bmWidth, bm.bmHeight, hCmpDC, 0, 0, SRCCOPY);
+			BitBlt(hdc, (rect.right-rect.left)/2-bm.bmWidth/2, bm.bmHeight, bm.bmWidth, bm.bmHeight, hCmpDC, 0, 0, SRCCOPY);
 
 			break;
 		case PAUSE:
