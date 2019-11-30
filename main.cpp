@@ -1,9 +1,8 @@
 #include"Game.h"
-#include<tchar.h>
 #include <time.h>
 
-static TCHAR szWndClassName[] = "WindowClass";
-static TCHAR szTitle[] = "Arkanoid";
+const TCHAR szWndClassName[] = "WindowClass";
+const TCHAR szTitle[] = "Arkanoid";
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -34,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		szTitle,
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		800, 540,
+		900, 600,
 		NULL,
 		NULL,
 		hInstance,
@@ -65,12 +64,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 enum States { PLAING, PAUSE, MENU, RESULTS };
+#define FWIDTH 595
+#define FHEIGHT 460
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc, hCmpDC;
 	PAINTSTRUCT ps;
 	RECT rect;
+	static HANDLE hBitMap;
+	static BITMAP bm;
 	States state = MENU;
 	Game game;
 	static int wheelDelta = 0;
@@ -81,22 +84,51 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		
 		break;
 	case WM_PAINT:
+		GetClientRect(hWnd, &rect);
+		hdc = BeginPaint(hWnd, &ps);
+		hCmpDC = CreateCompatibleDC(hdc);
+
+		LOGBRUSH br;
+		br.lbStyle = BS_SOLID;
+		br.lbColor = 0x000000;
+
+		HBRUSH brush;
+		brush = CreateBrushIndirect(&br);
+		FillRect(hdc, &rect, brush);
+		DeleteObject(brush);
+
 		switch (state) 
 		{
 		case MENU:
-			game.showMenu();
+			//game.showMenu(hdc, rect);
+			hBitMap = LoadImage(NULL, "pngguru.jpg", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+			if (!hBitMap)
+			{
+				MessageBox(hWnd, "", "", MB_OK);
+				return 0;
+			}
+
+			GetObject(hBitMap, sizeof(BITMAP), &bm);
+			SetStretchBltMode(hdc, COLORONCOLOR);
+			SelectObject(hCmpDC, hBitMap);
+			BitBlt(hdc, 0, 0, bm.bmWidth, bm.bmHeight, hCmpDC, 0, 0, SRCCOPY);
+
 			break;
 		case PAUSE:
 
 			break;
 		case PLAING:
-			//game.checkCollision();
-			game.drawPlaingProcess();
+			
+			//game.drawPlaingProcess();
 			break;
 		case RESULTS:
-			game.showResult();
+			//game.showResult();
 			break;
 		default:
+			DeleteObject(hCmpDC);
+			DeleteObject(hBitMap);
+			hCmpDC = NULL;
+			EndPaint(hWnd, &ps);
 			break;
 		}
 		break;
