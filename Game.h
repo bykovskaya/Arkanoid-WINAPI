@@ -11,7 +11,7 @@ private:
 	bool inGame;
 public:
 	Game();
-	void showMenu(HDC hdc, RECT rect);
+	int showMenu(HWND hWnd, HDC hdc, RECT rect);
 	/*void checkBlockBallCollision();
 	void checkBonusBoardCollision();
 	void drawPlaingProcess();

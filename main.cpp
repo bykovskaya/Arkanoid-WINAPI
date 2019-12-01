@@ -17,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wndClass.hInstance = hInstance;
 	wndClass.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 10);
+	wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW);
 	wndClass.lpszMenuName = NULL;
 	wndClass.lpszClassName = szWndClassName;
 	wndClass.hIconSm = LoadIcon(wndClass.hInstance, IDI_APPLICATION);
@@ -69,11 +69,9 @@ enum States { PLAING, PAUSE, MENU, RESULTS };
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	HDC hdc, hCmpDC;
+	HDC hdc;
 	PAINTSTRUCT ps;
 	RECT rect;
-	static HANDLE hBitMap;
-	static BITMAP bm;
 	States state = MENU;
 	Game game;
 	static int wheelDelta = 0;
@@ -86,7 +84,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 		GetClientRect(hWnd, &rect);
 		hdc = BeginPaint(hWnd, &ps);
-		hCmpDC = CreateCompatibleDC(hdc);
 
 		LOGBRUSH br;
 		br.lbStyle = BS_SOLID;
@@ -100,19 +97,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		switch (state) 
 		{
 		case MENU:
-			//game.showMenu(hdc, rect);
-			hBitMap = LoadImage(NULL, "pngguru.jpg", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-			if (!hBitMap)
-			{
-				MessageBox(hWnd, "", "", MB_OK);
-				return 0;
-			}
-
-			GetObject(hBitMap, sizeof(BITMAP), &bm);
-			SetStretchBltMode(hdc, COLORONCOLOR);
-			SelectObject(hCmpDC, hBitMap);
-			BitBlt(hdc, (rect.right-rect.left)/2-bm.bmWidth/2, bm.bmHeight, bm.bmWidth, bm.bmHeight, hCmpDC, 0, 0, SRCCOPY);
-
+			game.showMenu(hWnd, hdc, rect);
 			break;
 		case PAUSE:
 
@@ -125,9 +110,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			//game.showResult();
 			break;
 		default:
-			DeleteObject(hCmpDC);
-			DeleteObject(hBitMap);
-			hCmpDC = NULL;
 			EndPaint(hWnd, &ps);
 			break;
 		}
