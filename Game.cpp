@@ -1,10 +1,11 @@
 #include "Game.h"
 
 const wchar_t menuText[] = L"Press ENTER to start the game";
+const wchar_t pauseText[] = L"PAUSE";
 
-Game::Game() : inGame(false) {};
+Game::Game() : inGame(false){};
 
-int Game::showMenu(HWND hWnd, HDC hdc, RECT rect)
+int Game::Menu(HWND hWnd, HDC hdc, RECT rect)
 {
 	BITMAP bm;
 	HDC hCmpDC = CreateCompatibleDC(hdc);
@@ -28,8 +29,58 @@ int Game::showMenu(HWND hWnd, HDC hdc, RECT rect)
 	
 	TextOut(hdc, 240, 350, (LPCSTR)menuText, sizeof(menuText));
 
+	DeleteObject(hFont);
 	DeleteObject(hCmpDC);
 	DeleteObject(hBitMap);
 	hCmpDC = NULL;
+}
+void Game::Pause(HDC hdc, RECT rect)
+{
+	HFONT hFont;
+	static TEXTMETRIC tm;
+	hFont = CreateFont(20, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, VARIABLE_PITCH, "Pica");
+	GetTextMetrics(hdc, &tm);
+	SetTextColor(hdc, 0xffffff);
+	SetBkMode(hdc, TRANSPARENT);
+	SelectObject(hdc, hFont);
+
+	TextOut(hdc, 240, (rect.bottom-rect.top-tm.tmHeight)/2, (LPCSTR)pauseText, sizeof(pauseText));
+	DeleteObject(hFont);
+}
+
+bool Game::Status()
+{
+	return inGame;
+}
+
+void Game::setStatus(bool val)
+{
+	inGame = val;
+}
+
+
+void Game::checkBlockBallCollision()
+{
+
+}
+void Game::checkBonusBoardCollision()
+{
+
+}
+void Game::drawPlaingProcess(HDC hdc, RECT rect)
+{
+	HFONT hFont;
+	static TEXTMETRIC tm;
+	hFont = CreateFont(20, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, VARIABLE_PITCH, "Pica");
+	GetTextMetrics(hdc, &tm);
+	SetTextColor(hdc, 0xffffff);
+	SetBkMode(hdc, TRANSPARENT);
+	SelectObject(hdc, hFont);
+
+	TextOut(hdc, 0, (rect.bottom - rect.top - tm.tmHeight) / 2, (LPCSTR)pauseText, sizeof(pauseText));
+	DeleteObject(hFont);
+}
+void Game::Result(HDC hdc, RECT rect)
+{
 
 }

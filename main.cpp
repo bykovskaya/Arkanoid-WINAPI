@@ -72,14 +72,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	HDC hdc;
 	PAINTSTRUCT ps;
 	RECT rect;
-	States state = MENU;
-	Game game;
+	static Game game;
+	static States state = MENU;
 	static int wheelDelta = 0;
 	const unsigned int MYTIMER = 1;
 	switch (uMsg)
 	{
 	case WM_CREATE:
-		
+
 		break;
 	case WM_PAINT:
 		GetClientRect(hWnd, &rect);
@@ -94,20 +94,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		FillRect(hdc, &rect, brush);
 		DeleteObject(brush);
 
-		switch (state) 
+		switch (state)
 		{
 		case MENU:
-			game.showMenu(hWnd, hdc, rect);
+			game.Menu(hWnd, hdc, rect);
 			break;
 		case PAUSE:
-
+			game.Pause(hdc, rect);
 			break;
 		case PLAING:
-			
-			//game.drawPlaingProcess();
+			game.drawPlaingProcess(hdc, rect);
 			break;
 		case RESULTS:
-			//game.showResult();
+			//game.Result(hdc, rect);
 			break;
 		default:
 			EndPaint(hWnd, &ps);
@@ -121,13 +120,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		switch (keyPressed)
 		{
 		case VK_LEFT:
-			
+
 			break;
 		case VK_RIGHT:
-			
+
+			break;
+		case VK_RETURN:
+			if (!game.Status())
+			{
+				state = PLAING;
+				game.setStatus(true);
+			}
 			break;
 		case VK_SPACE:
-			state = PAUSE;
+			if (game.Status())
+			{
+				state = PAUSE;
+				
+				//stop timer...
+			}
 			break;
 		case VK_ESCAPE:
 
@@ -140,14 +151,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEWHEEL:
 		GetClientRect(hWnd, &rect);
 		wheelDelta += GET_WHEEL_DELTA_WPARAM(wParam);
-		
+
 		for (; wheelDelta > WHEEL_DELTA; wheelDelta -= WHEEL_DELTA)
 			//	MoveLeft(step);
 			;
 		for (; wheelDelta < 0; wheelDelta += WHEEL_DELTA)
 			//MoveRight(rect.right, bm.bmWidth, step);
 			;
-		
+
 		InvalidateRect(hWnd, NULL, FALSE);
 		break;
 	case WM_ERASEBKGND:

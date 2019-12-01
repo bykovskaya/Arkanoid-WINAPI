@@ -11,10 +11,13 @@ private:
 	bool inGame;
 public:
 	Game();
-	int showMenu(HWND hWnd, HDC hdc, RECT rect);
-	/*void checkBlockBallCollision();
+	int Menu(HWND hWnd, HDC hdc, RECT rect);
+	bool Status();
+	void setStatus(bool);
+	void checkBlockBallCollision();
 	void checkBonusBoardCollision();
-	void drawPlaingProcess();
-	void showResult();*/
+	void drawPlaingProcess(HDC hdc, RECT rect);
+	void Pause(HDC hdc, RECT rect);
+	void Result(HDC hdc, RECT rect);
 };
 
