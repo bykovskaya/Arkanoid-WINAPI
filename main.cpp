@@ -63,7 +63,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return (int)msg.wParam;
 }
 
-enum States { PLAING, PAUSE, MENU, RESULTS };
 #define FWIDTH 595
 #define FHEIGHT 460
 
@@ -73,7 +72,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	RECT rect;
 	static Game game;
-	static States state = MENU;
 	static int wheelDelta = 0;
 	const unsigned int MYTIMER = 1;
 	switch (uMsg)
@@ -94,7 +92,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		FillRect(hdc, &rect, brush);
 		DeleteObject(brush);
 
-		switch (state)
+		switch (game.Status())
 		{
 		case MENU:
 			game.Menu(hWnd, hdc, rect);
@@ -126,18 +124,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			break;
 		case VK_RETURN:
-			if (!game.Status())
-			{
-				state = PLAING;
-				game.setStatus(true);
-			}
+			if (game.Status() == MENU)
+				game.setStatus(PLAING);
 			break;
 		case VK_SPACE:
-			if (game.Status())
-			{
-				state = PAUSE;
-				
+			if (game.Status() == PLAING)
+				game.setStatus(PAUSE);
 				//stop timer...
+			else {
+				if (game.Status() == PAUSE)
+					game.setStatus(PLAING);
 			}
 			break;
 		case VK_ESCAPE:

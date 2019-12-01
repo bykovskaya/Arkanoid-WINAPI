@@ -5,15 +5,16 @@
 #include"Bonus.h"
 #include"common.h"
 
+enum States { PLAING, PAUSE, MENU, RESULTS };
 class Game
 {
 private:
-	bool inGame;
+	States state;
 public:
 	Game();
 	int Menu(HWND hWnd, HDC hdc, RECT rect);
-	bool Status();
-	void setStatus(bool);
+	States Status();
+	void setStatus(States);
 	void checkBlockBallCollision();
 	void checkBonusBoardCollision();
 	void drawPlaingProcess(HDC hdc, RECT rect);

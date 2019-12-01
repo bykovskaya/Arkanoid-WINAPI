@@ -3,7 +3,7 @@
 const wchar_t menuText[] = L"Press ENTER to start the game";
 const wchar_t pauseText[] = L"PAUSE";
 
-Game::Game() : inGame(false){};
+Game::Game() : state(MENU){};
 
 int Game::Menu(HWND hWnd, HDC hdc, RECT rect)
 {
@@ -48,14 +48,14 @@ void Game::Pause(HDC hdc, RECT rect)
 	DeleteObject(hFont);
 }
 
-bool Game::Status()
+States Game::Status()
 {
-	return inGame;
+	return state;
 }
 
-void Game::setStatus(bool val)
+void Game::setStatus(States val)
 {
-	inGame = val;
+	state = val;
 }
 
 
