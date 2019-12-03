@@ -76,9 +76,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	const unsigned int MYTIMER = 1;
 	switch (uMsg)
 	{
-	case WM_CREATE:
-
-		break;
 	case WM_PAINT:
 		GetClientRect(hWnd, &rect);
 		hdc = BeginPaint(hWnd, &ps);
@@ -104,24 +101,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			game.drawPlaingProcess(hdc, rect);
 			break;
 		case RESULTS:
-			//game.Result(hdc, rect);
+			game.gameResult(hdc, rect);
 			break;
 		default:
-			EndPaint(hWnd, &ps);
 			break;
 		}
+		EndPaint(hWnd, &ps);
 		break;
 	case WM_KEYDOWN:
 		int keyPressed;
 		keyPressed = (int)wParam;
-		GetClientRect(hWnd, &rect);
 		switch (keyPressed)
 		{
 		case VK_LEFT:
+			if (game.Status() == PLAING)
+			{
 
+			}
 			break;
 		case VK_RIGHT:
+			if (game.Status() == PLAING)
+			{
 
+			}
 			break;
 		case VK_RETURN:
 			if (game.Status() == MENU)
@@ -136,25 +138,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					game.setStatus(PLAING);
 			}
 			break;
-		case VK_ESCAPE:
-
-			break;
 		default:
 			break;
 		}
-		InvalidateRect(hWnd, NULL, FALSE);
-		break;
-	case WM_MOUSEWHEEL:
-		GetClientRect(hWnd, &rect);
-		wheelDelta += GET_WHEEL_DELTA_WPARAM(wParam);
-
-		for (; wheelDelta > WHEEL_DELTA; wheelDelta -= WHEEL_DELTA)
-			//	MoveLeft(step);
-			;
-		for (; wheelDelta < 0; wheelDelta += WHEEL_DELTA)
-			//MoveRight(rect.right, bm.bmWidth, step);
-			;
-
 		InvalidateRect(hWnd, NULL, FALSE);
 		break;
 	case WM_ERASEBKGND:

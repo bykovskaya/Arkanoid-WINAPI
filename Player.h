@@ -1,13 +1,16 @@
 #pragma once
 
-class Board
+class Player
 {
 private:
 	int width;
 	int height;
 	int posX, posY;
+	int stars;
+	int lifes;
+	int points;
 public:
-	Board();
+	Player();
 	int X();
 	int Y();
 	void Move(int horStep);

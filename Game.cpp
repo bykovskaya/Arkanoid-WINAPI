@@ -1,20 +1,17 @@
 #include "Game.h"
+#include"common.h"
 
 const wchar_t menuText[] = L"Press ENTER to start the game";
 const wchar_t pauseText[] = L"PAUSE";
+void printMessage(HDC, const wchar_t*, int, int, int);
 
 Game::Game() : state(MENU){};
 
-int Game::Menu(HWND hWnd, HDC hdc, RECT rect)
+void Game::Menu(HWND hWnd, HDC hdc, RECT rect)
 {
 	BITMAP bm;
 	HDC hCmpDC = CreateCompatibleDC(hdc);
 	HANDLE hBitMap = LoadImage(NULL, "pngguru.jpg", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	if (!hBitMap)
-	{
-		MessageBox(hWnd, "File is not found.", "Error", MB_OK);
-		return 0;
-	}
 
 	GetObject(hBitMap, sizeof(BITMAP), &bm);
 	SetStretchBltMode(hdc, COLORONCOLOR);
@@ -33,6 +30,7 @@ int Game::Menu(HWND hWnd, HDC hdc, RECT rect)
 	DeleteObject(hCmpDC);
 	DeleteObject(hBitMap);
 	hCmpDC = NULL;
+
 }
 void Game::Pause(HDC hdc, RECT rect)
 {
@@ -43,8 +41,7 @@ void Game::Pause(HDC hdc, RECT rect)
 	SetTextColor(hdc, 0xffffff);
 	SetBkMode(hdc, TRANSPARENT);
 	SelectObject(hdc, hFont);
-
-	TextOut(hdc, 240, (rect.bottom-rect.top-tm.tmHeight)/2, (LPCSTR)pauseText, sizeof(pauseText));
+	TextOut(hdc, ((rect.right-rect.left-tm.tmAveCharWidth * sizeof(pauseText)) / 2), (rect.bottom - rect.top - tm.tmHeight) / 2, (LPCSTR)pauseText, sizeof(pauseText));
 	DeleteObject(hFont);
 }
 
@@ -69,18 +66,9 @@ void Game::checkBonusBoardCollision()
 }
 void Game::drawPlaingProcess(HDC hdc, RECT rect)
 {
-	HFONT hFont;
-	static TEXTMETRIC tm;
-	hFont = CreateFont(20, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, VARIABLE_PITCH, "Pica");
-	GetTextMetrics(hdc, &tm);
-	SetTextColor(hdc, 0xffffff);
-	SetBkMode(hdc, TRANSPARENT);
-	SelectObject(hdc, hFont);
-
-	TextOut(hdc, 0, (rect.bottom - rect.top - tm.tmHeight) / 2, (LPCSTR)pauseText, sizeof(pauseText));
-	DeleteObject(hFont);
+	
 }
-void Game::Result(HDC hdc, RECT rect)
+void Game::gameResult(HDC hdc, RECT rect)
 {
 
 }
