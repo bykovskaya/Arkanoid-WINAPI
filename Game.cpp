@@ -3,9 +3,12 @@
 
 const wchar_t menuText[] = L"Press ENTER to start the game";
 const wchar_t pauseText[] = L"PAUSE";
-void printMessage(HDC, const wchar_t*, int, int, int);
 
-Game::Game() : state(MENU){};
+
+Game::Game() : state(MENU)
+{
+
+};
 
 void Game::Menu(HWND hWnd, HDC hdc, RECT rect)
 {
@@ -23,7 +26,7 @@ void Game::Menu(HWND hWnd, HDC hdc, RECT rect)
 	SetTextColor(hdc, 0xffffff);
 	SetBkMode(hdc, TRANSPARENT);
 	SelectObject(hdc, hFont);
-	
+
 	TextOut(hdc, 240, 350, (LPCSTR)menuText, sizeof(menuText));
 
 	DeleteObject(hFont);
@@ -41,7 +44,7 @@ void Game::Pause(HDC hdc, RECT rect)
 	SetTextColor(hdc, 0xffffff);
 	SetBkMode(hdc, TRANSPARENT);
 	SelectObject(hdc, hFont);
-	TextOut(hdc, ((rect.right-rect.left-tm.tmAveCharWidth * sizeof(pauseText)) / 2), (rect.bottom - rect.top - tm.tmHeight) / 2, (LPCSTR)pauseText, sizeof(pauseText));
+	TextOut(hdc, ((rect.right - rect.left - tm.tmAveCharWidth * sizeof(pauseText)) / 2), (rect.bottom - rect.top - tm.tmHeight) / 2, (LPCSTR)pauseText, sizeof(pauseText));
 	DeleteObject(hFont);
 }
 
@@ -56,17 +59,68 @@ void Game::setStatus(States val)
 }
 
 
-void Game::checkBlockBallCollision()
-{
 
-}
-void Game::checkBonusBoardCollision()
-{
-
-}
 void Game::drawPlaingProcess(HDC hdc, RECT rect)
 {
-	
+	HPEN hPen;
+	hPen = CreatePen(PS_SOLID, 2, RGB(255, 200, 10));
+	SelectObject(hdc, hPen);
+	MoveToEx(hdc, OX, OY, NULL);
+	LineTo(hdc, OX + FWIDTH, OY);
+	LineTo(hdc, OX + FWIDTH, OY + FHEIGHT);
+	LineTo(hdc, OX, OY + FHEIGHT);
+	LineTo(hdc, OX, OY);
+
+	//рисование блоков
+	BITMAP bm;
+	HDC hCmpDC = CreateCompatibleDC(hdc);
+	//HANDLE hBitMap = LoadImage(NULL, "pngguru.jpg", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	static HANDLE hBitMap;
+	int blockarr[N][N];
+	blocks.copyArray(blockarr);
+	for (int j = 0; j < N; j++)
+	{
+		for (int i = 0; i < N; i++)
+		{
+			switch (blockarr[j][i])
+			{
+			case 1:
+				hBitMap = LoadImage(NULL, "blue_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				break;
+			case 2:
+				hBitMap = LoadImage(NULL, "green_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				break;
+			case 3:
+				hBitMap = LoadImage(NULL, "red_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				break;
+			case 4:
+				hBitMap = LoadImage(NULL, "lblue_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				break;
+			case 5:
+				hBitMap = LoadImage(NULL, "yell_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				break;
+			case 6:
+				hBitMap = LoadImage(NULL, "or_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				break;
+			case 7:
+				hBitMap = LoadImage(NULL, "purple_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+				break;
+			}
+			if (blockarr[j][i] != 0)
+			{
+				GetObject(hBitMap, sizeof(BITMAP), &bm);
+				SetStretchBltMode(hdc, COLORONCOLOR);
+				SelectObject(hCmpDC, hBitMap);
+				BitBlt(hdc, OX + bm.bmWidth * j, OY + bm.bmHeight * i, bm.bmWidth, bm.bmHeight, hCmpDC, 0, 0, SRCCOPY);
+
+			}
+		}
+
+	}
+
+	DeleteObject(hCmpDC);
+	DeleteObject(hBitMap);
+	hCmpDC = NULL;
 }
 void Game::gameResult(HDC hdc, RECT rect)
 {

@@ -3,8 +3,8 @@
 class Player
 {
 private:
-	int width;
-	int height;
+	/*int width;
+	int height;*/
 	int posX, posY;
 	int stars;
 	int lifes;
@@ -15,5 +15,7 @@ public:
 	int Y();
 	void Move(int horStep);
 	void Resize(int deltaSize);
+	void checkBallCollision();
+	void checkBonusCollision();
 };
 

@@ -30,6 +30,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Blocks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -44,10 +47,13 @@
     <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Blocks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -58,6 +64,36 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="pngguru.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="blue_block.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="green_block.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="large_platf.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="lblue_block.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="or_block.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="platform.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="purple_block.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="red_block.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="small_platf.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="yell_block.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -10,5 +10,6 @@ public:
 	int X();
 	int Y();
 	void Move(int horStep, int vertStep);
+
 };
 

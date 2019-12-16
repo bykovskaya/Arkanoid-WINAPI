@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		szTitle,
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		900, 600,
+		900, 540,
 		NULL,
 		NULL,
 		hInstance,
@@ -72,7 +72,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	RECT rect;
 	static Game game;
-	static int wheelDelta = 0;
 	const unsigned int MYTIMER = 1;
 	switch (uMsg)
 	{
