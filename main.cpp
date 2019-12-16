@@ -17,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wndClass.hInstance = hInstance;
 	wndClass.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW);
+	wndClass.hbrBackground = NULL;
 	wndClass.lpszMenuName = NULL;
 	wndClass.lpszClassName = szWndClassName;
 	wndClass.hIconSm = LoadIcon(wndClass.hInstance, IDI_APPLICATION);
@@ -72,32 +72,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	PAINTSTRUCT ps;
 	RECT rect;
 	static Game game;
+	static int step = 10;
 	const unsigned int MYTIMER = 1;
 	switch (uMsg)
 	{
+	case WM_CREATE:
+		//SetTimer(hWnd, MYTIMER, 150, NULL);
+		break;
 	case WM_PAINT:
 		GetClientRect(hWnd, &rect);
 		hdc = BeginPaint(hWnd, &ps);
-
-		LOGBRUSH br;
-		br.lbStyle = BS_SOLID;
-		br.lbColor = 0x000000;
-
-		HBRUSH brush;
-		brush = CreateBrushIndirect(&br);
-		FillRect(hdc, &rect, brush);
-		DeleteObject(brush);
-
+		
 		switch (game.Status())
 		{
 		case MENU:
-			game.Menu(hWnd, hdc, rect);
+			game.Menu(hdc, rect);
 			break;
 		case PAUSE:
 			game.Pause(hdc, rect);
 			break;
-		case PLAING:
-			game.drawPlaingProcess(hdc, rect);
+		case PLAYING:
+			game.drawPlayingProcess(hdc, rect);
 			break;
 		case RESULTS:
 			game.gameResult(hdc, rect);
@@ -113,28 +108,31 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		switch (keyPressed)
 		{
 		case VK_LEFT:
-			if (game.Status() == PLAING)
+			if (game.Status() == PLAYING)
 			{
-
+				game.controlGame(-step);
 			}
 			break;
 		case VK_RIGHT:
-			if (game.Status() == PLAING)
+			if (game.Status() == PLAYING)
 			{
-
+				game.controlGame(step);
 			}
 			break;
 		case VK_RETURN:
 			if (game.Status() == MENU)
-				game.setStatus(PLAING);
+				game.setStatus(PLAYING);
 			break;
 		case VK_SPACE:
-			if (game.Status() == PLAING)
+			if (game.Status() == PLAYING)
+			{
 				game.setStatus(PAUSE);
-				//stop timer...
+				//KillTimer(hWnd, MYTIMER);
+			}
 			else {
 				if (game.Status() == PAUSE)
-					game.setStatus(PLAING);
+					game.setStatus(PLAYING);
+				//SetTimer(hWnd, MYTIMER, 150, NULL);
 			}
 			break;
 		default:

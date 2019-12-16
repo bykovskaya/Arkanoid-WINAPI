@@ -3,15 +3,34 @@
 
 const wchar_t menuText[] = L"Press ENTER to start the game";
 const wchar_t pauseText[] = L"PAUSE";
-
+const char* imgBlocks[] = { {"red_block.bmp"},{"or_block.bmp"},{"yell_block.bmp"},{"green_block.bmp"},
+							{"lblue_block.bmp"},{"blue_block.bmp"},
+							{"purple_block.bmp"} };
 
 Game::Game() : state(MENU)
 {
+	for (int i = 0; i < N; i++)
+	{
+		hBMBlock[i] = LoadImage(NULL, imgBlocks[i], IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);	
+	}
 
 };
-
-void Game::Menu(HWND hWnd, HDC hdc, RECT rect)
+void ClearWorkspace(HDC hdc, RECT rect) 
 {
+	LOGBRUSH br;
+	br.lbStyle = BS_SOLID;
+	br.lbColor = 0x000000;
+	
+	HBRUSH brush;
+	brush = CreateBrushIndirect(&br);
+	FillRect(hdc, &rect, brush);
+	DeleteObject(brush);
+}
+
+void Game::Menu( HDC hdc, RECT rect)
+{
+	ClearWorkspace( hdc,  rect);
+
 	BITMAP bm;
 	HDC hCmpDC = CreateCompatibleDC(hdc);
 	HANDLE hBitMap = LoadImage(NULL, "pngguru.jpg", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
@@ -33,10 +52,10 @@ void Game::Menu(HWND hWnd, HDC hdc, RECT rect)
 	DeleteObject(hCmpDC);
 	DeleteObject(hBitMap);
 	hCmpDC = NULL;
-
 }
 void Game::Pause(HDC hdc, RECT rect)
 {
+	ClearWorkspace( hdc,  rect);
 	HFONT hFont;
 	static TEXTMETRIC tm;
 	hFont = CreateFont(20, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, VARIABLE_PITCH, "Pica");
@@ -58,68 +77,64 @@ void Game::setStatus(States val)
 	state = val;
 }
 
-
-
-void Game::drawPlaingProcess(HDC hdc, RECT rect)
+void Game::controlGame(int horStep)
 {
+	player.Move(horStep);
+}
+
+void Game::drawPlayingProcess(HDC hdc, RECT rect)
+{
+	HDC hCmpDC = CreateCompatibleDC(hdc);
+	HBITMAP hCmpBM = CreateCompatibleBitmap(hdc, rect.right - rect.left, rect.bottom - rect.top);
+	SelectObject(hCmpDC, hCmpBM);
+	ClearWorkspace(hCmpDC, rect);
+
 	HPEN hPen;
 	hPen = CreatePen(PS_SOLID, 2, RGB(255, 200, 10));
-	SelectObject(hdc, hPen);
-	MoveToEx(hdc, OX, OY, NULL);
-	LineTo(hdc, OX + FWIDTH, OY);
-	LineTo(hdc, OX + FWIDTH, OY + FHEIGHT);
-	LineTo(hdc, OX, OY + FHEIGHT);
-	LineTo(hdc, OX, OY);
+	SelectObject(hCmpDC, hPen);
+	MoveToEx(hCmpDC, OX - 1, OY, NULL);
+	LineTo(hCmpDC, OX + FWIDTH + 1, OY);
+	LineTo(hCmpDC, OX + FWIDTH + 1, OY + FHEIGHT + 1);
+	LineTo(hCmpDC, OX - 1, OY + FHEIGHT + 1);
+	LineTo(hCmpDC, OX - 1, OY);
+	DeleteObject(hPen);
+
+	HDC hCmpDC2 = CreateCompatibleDC(hCmpDC);
+	HANDLE hBitMap;
+	BITMAP bm;
+
+	//отрисовка платформы
+	hBitMap = LoadImage(NULL, "platform.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	GetObject(hBitMap, sizeof(BITMAP), &bm);
+	SetStretchBltMode(hCmpDC, COLORONCOLOR);
+	SelectObject(hCmpDC2, hBitMap);
+	BitBlt(hCmpDC, player.X(), player.Y(), bm.bmWidth, bm.bmHeight, hCmpDC2, 0, 0, SRCCOPY);
 
 	//рисование блоков
-	BITMAP bm;
-	HDC hCmpDC = CreateCompatibleDC(hdc);
-	//HANDLE hBitMap = LoadImage(NULL, "pngguru.jpg", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-	static HANDLE hBitMap;
+	
 	int blockarr[N][N];
 	blocks.copyArray(blockarr);
 	for (int j = 0; j < N; j++)
 	{
 		for (int i = 0; i < N; i++)
 		{
-			switch (blockarr[j][i])
-			{
-			case 1:
-				hBitMap = LoadImage(NULL, "blue_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-				break;
-			case 2:
-				hBitMap = LoadImage(NULL, "green_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-				break;
-			case 3:
-				hBitMap = LoadImage(NULL, "red_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-				break;
-			case 4:
-				hBitMap = LoadImage(NULL, "lblue_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-				break;
-			case 5:
-				hBitMap = LoadImage(NULL, "yell_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-				break;
-			case 6:
-				hBitMap = LoadImage(NULL, "or_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-				break;
-			case 7:
-				hBitMap = LoadImage(NULL, "purple_block.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
-				break;
-			}
 			if (blockarr[j][i] != 0)
 			{
-				GetObject(hBitMap, sizeof(BITMAP), &bm);
-				SetStretchBltMode(hdc, COLORONCOLOR);
-				SelectObject(hCmpDC, hBitMap);
-				BitBlt(hdc, OX + bm.bmWidth * j, OY + bm.bmHeight * i, bm.bmWidth, bm.bmHeight, hCmpDC, 0, 0, SRCCOPY);
-
+				GetObject(hBMBlock[i], sizeof(BITMAP), &bm);
+				SetStretchBltMode(hCmpDC, COLORONCOLOR);
+				SelectObject(hCmpDC2, hBMBlock[i]);
+				BitBlt(hCmpDC, OX + bm.bmWidth * j, OY + bm.bmHeight * i, bm.bmWidth, bm.bmHeight, hCmpDC2, 0, 0, SRCCOPY);
 			}
 		}
-
 	}
+	SelectObject(hCmpDC, hCmpBM);
+	SetStretchBltMode(hdc, COLORONCOLOR);
+	BitBlt(hdc, 0, 0, rect.right - rect.left, rect.bottom - rect.top, hCmpDC, 0, 0, SRCCOPY);
 
-	DeleteObject(hCmpDC);
+	DeleteDC(hCmpDC);
+	DeleteDC(hCmpDC2);
 	DeleteObject(hBitMap);
+	DeleteObject(hCmpBM);
 	hCmpDC = NULL;
 }
 void Game::gameResult(HDC hdc, RECT rect)

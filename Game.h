@@ -6,20 +6,21 @@
 #include"Blocks.h"
 #include"common.h"
 
-enum States { PLAING, PAUSE, MENU, RESULTS };
+enum States { PLAYING, PAUSE, MENU, RESULTS };
 class Game
 {
 private:
+	HANDLE hBMBlock[7];
 	States state;
-	//Player player;
+	Player player;
 	//Ball ball;
 	//Bonus bonus;
 	Blocks blocks;
 public:
 	Game();
-	void Menu(HWND hWnd, HDC hdc, RECT rect);
-	void controlGame();
-	void drawPlaingProcess(HDC hdc, RECT rect);
+	void Menu( HDC hdc, RECT rect);
+	void controlGame(int horStep);
+	void drawPlayingProcess(HDC hdc, RECT rect);
 	void Pause(HDC hdc, RECT rect);
 	void gameResult(HDC hdc, RECT rect);
 	void setStatus(States);
