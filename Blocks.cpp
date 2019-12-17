@@ -19,13 +19,7 @@ int Blocks::Height()
 {
 	return height;
 }
-void Blocks::CheckCollision(int oX, int oY)
-{
-	if (oY >= height * N)
-	{
 
-	}
-}
 void Blocks::copyArray(int arr[N][N])
 {
 	for (int j = 0; j < N; j++)

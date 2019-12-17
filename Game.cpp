@@ -103,7 +103,7 @@ void Game::drawPlayingProcess(HDC hdc, RECT rect)
 	HANDLE hBitMap;
 	BITMAP bm;
 
-	//отрисовка платформы
+	//рисование платформы
 	hBitMap = LoadImage(NULL, "platform.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	GetObject(hBitMap, sizeof(BITMAP), &bm);
 	SetStretchBltMode(hCmpDC, COLORONCOLOR);

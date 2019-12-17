@@ -17,7 +17,6 @@ public:
 	int Y();
 	void Move(int horStep);
 	void Resize(int deltaSize);
-	void checkBallCollision();
 	void checkBonusCollision();
 };
 

@@ -11,7 +11,6 @@ public:
 	Blocks();
 	int Width();
 	int Height();
-	void CheckCollision(int oX, int oY);
 	void copyArray(int arr[N][N]);
 };
 
