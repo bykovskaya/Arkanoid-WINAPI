@@ -11,6 +11,8 @@ public:
 	Blocks();
 	int Width();
 	int Height();
-	void copyArray(int arr[N][N]);
+	void decrease(int j, int i);
+	int value(int j, int i);
+	void Reset();
 };
 

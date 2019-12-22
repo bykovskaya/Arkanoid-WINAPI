@@ -118,7 +118,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		case VK_RETURN:
-			if (game.Status() == MENU|RESULTS)
+			if (game.Status() == MENU||RESULTS)
 			{
 				game.setStatus(PLAYING);
 				SetTimer(hWnd, MYTIMER, 100, NULL);

@@ -13,10 +13,8 @@ public:
 	Ball();
 	int X();
 	int Y();
-	void Move(Blocks blocks, Player player);
+	void Move(Blocks *blocks, Player player);
 	void Reset();
-	/*void CheckCollision(Blocks blocks);
-	bool CheckCollision(Player player);
-	void CheckCollision();*/
+	//void CheckCollision();
 };
 

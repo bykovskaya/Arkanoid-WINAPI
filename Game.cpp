@@ -15,7 +15,7 @@ Game::Game() : state(MENU)
 	{
 		hBMBlock[i] = LoadImage(NULL, imgBlocks[i], IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);	
 	}
-
+	blocks = new Blocks();
 };
 void ClearWorkspace(HDC hdc, RECT rect) 
 {
@@ -110,6 +110,7 @@ void Game:: controlBall()
 		state = RESULTS;
 		player.Reset();
 		ball.Reset();
+		blocks->Reset();
 	}
 		
 }
@@ -151,13 +152,11 @@ void Game::drawPlayingProcess(HDC hdc, RECT rect)
 
 	//рисование блоков
 	
-	/*int blockarr[N][N];
-	blocks.copyArray(blockarr);
 	for (int j = 0; j < N; j++)
 	{
 		for (int i = 0; i < N; i++)
 		{
-			if (blockarr[j][i] != 0)
+			if (blocks->value(j, i) != 0)
 			{
 				GetObject(hBMBlock[i], sizeof(BITMAP), &bm);
 				SetStretchBltMode(hCmpDC, COLORONCOLOR);
@@ -165,7 +164,7 @@ void Game::drawPlayingProcess(HDC hdc, RECT rect)
 				BitBlt(hCmpDC, OX + bm.bmWidth * j, OY + bm.bmHeight * i, bm.bmWidth, bm.bmHeight, hCmpDC2, 0, 0, SRCCOPY);
 			}
 		}
-	}*/
+	}
 	
 
 	SelectObject(hCmpDC, hCmpBM);

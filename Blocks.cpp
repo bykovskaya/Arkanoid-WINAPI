@@ -6,7 +6,7 @@ Blocks::Blocks()
 	{
 		for (int i = 0; i < N; i++)
 		{
-			block[i][j] = j+1;
+			block[j][i] = 1;
 		}
 	}
 }
@@ -20,13 +20,21 @@ int Blocks::Height()
 	return height;
 }
 
-void Blocks::copyArray(int arr[N][N])
+void Blocks:: decrease(int j, int i)
+{
+	--(block[j][i]);
+}
+int Blocks::value(int j, int i)
+{
+	return block[j][i];
+}
+void Blocks::Reset()
 {
 	for (int j = 0; j < N; j++)
 	{
 		for (int i = 0; i < N; i++)
 		{
-			arr[j][i] = block[j][i];
+			block[j][i] = 1;
 		}
 	}
 }

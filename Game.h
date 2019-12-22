@@ -15,7 +15,7 @@ private:
 	Player player;
 	Ball ball;
 	//Bonus bonus;
-	Blocks blocks;
+	Blocks *blocks;
 public:
 	Game();
 	void Menu( HDC hdc, RECT rect);
