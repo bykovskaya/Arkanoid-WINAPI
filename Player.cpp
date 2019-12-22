@@ -19,3 +19,16 @@ int Player::Y()
 {
 	return posY;
 }
+int Player::plHeight()
+{
+	return height;
+}
+int Player::plWidth()
+{
+	return width;
+}
+void Player::Reset() 
+{
+	posX = OX + ((FWIDTH - 75) / 2);
+	width = 75;
+}

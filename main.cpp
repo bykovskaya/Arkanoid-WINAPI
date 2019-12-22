@@ -76,9 +76,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	const unsigned int MYTIMER = 1;
 	switch (uMsg)
 	{
-	case WM_CREATE:
-		//SetTimer(hWnd, MYTIMER, 150, NULL);
-		break;
 	case WM_PAINT:
 		GetClientRect(hWnd, &rect);
 		hdc = BeginPaint(hWnd, &ps);
@@ -95,6 +92,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			game.drawPlayingProcess(hdc, rect);
 			break;
 		case RESULTS:
+			KillTimer(hWnd, MYTIMER);
 			game.gameResult(hdc, rect);
 			break;
 		default:
@@ -110,34 +108,43 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case VK_LEFT:
 			if (game.Status() == PLAYING)
 			{
-				game.controlGame(-step);
+				game.controlPlayer(-step);
 			}
 			break;
 		case VK_RIGHT:
 			if (game.Status() == PLAYING)
 			{
-				game.controlGame(step);
+				game.controlPlayer(step);
 			}
 			break;
 		case VK_RETURN:
-			if (game.Status() == MENU)
+			if (game.Status() == MENU|RESULTS)
+			{
 				game.setStatus(PLAYING);
+				SetTimer(hWnd, MYTIMER, 100, NULL);
+			}
 			break;
 		case VK_SPACE:
 			if (game.Status() == PLAYING)
 			{
 				game.setStatus(PAUSE);
-				//KillTimer(hWnd, MYTIMER);
+				KillTimer(hWnd, MYTIMER);
 			}
 			else {
 				if (game.Status() == PAUSE)
+				{
 					game.setStatus(PLAYING);
-				//SetTimer(hWnd, MYTIMER, 150, NULL);
+					SetTimer(hWnd, MYTIMER, 100, NULL);
+				}
 			}
 			break;
 		default:
 			break;
 		}
+		InvalidateRect(hWnd, NULL, FALSE);
+		break;
+	case WM_TIMER:
+		game.controlBall();
 		InvalidateRect(hWnd, NULL, FALSE);
 		break;
 	case WM_ERASEBKGND:

@@ -140,20 +140,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Project Arkanoid Game.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="blue_block.bmp" />
-    <Image Include="green_block.bmp" />
-    <Image Include="large_platf.bmp" />
-    <Image Include="lblue_block.bmp" />
-    <Image Include="or_block.bmp" />
-    <Image Include="platform.bmp" />
     <Image Include="pngguru.jpg" />
-    <Image Include="purple_block.bmp" />
-    <Image Include="red_block.bmp" />
-    <Image Include="small_platf.bmp" />
-    <Image Include="yell_block.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

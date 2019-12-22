@@ -13,13 +13,15 @@ private:
 	HANDLE hBMBlock[7];
 	States state;
 	Player player;
-	//Ball ball;
+	Ball ball;
 	//Bonus bonus;
 	Blocks blocks;
 public:
 	Game();
 	void Menu( HDC hdc, RECT rect);
-	void controlGame(int horStep);
+	void controlPlayer(int horStep);
+	void controlBall();
+	void controlGame();
 	void drawPlayingProcess(HDC hdc, RECT rect);
 	void Pause(HDC hdc, RECT rect);
 	void gameResult(HDC hdc, RECT rect);

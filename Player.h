@@ -7,7 +7,7 @@ private:
 	int width;
 	int posX;
 	const int height = 20;
-	const int posY = FHEIGHT-1;
+	const int posY = FHEIGHT;
 	int stars;
 	int lifes;
 	int points;
@@ -15,8 +15,11 @@ public:
 	Player();
 	int X();
 	int Y();
+	int plHeight();
+	int plWidth();
 	void Move(int horStep);
 	void Resize(int deltaSize);
 	void checkBonusCollision();
+	void Reset();
 };
 

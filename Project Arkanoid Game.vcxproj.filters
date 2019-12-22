@@ -58,42 +58,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Project Arkanoid Game.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="pngguru.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="blue_block.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="green_block.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="large_platf.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="lblue_block.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="or_block.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="platform.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="purple_block.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="red_block.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="small_platf.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="yell_block.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
