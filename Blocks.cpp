@@ -2,11 +2,20 @@
 
 Blocks::Blocks()
 {
+	int arr[N][N] = { {0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0},
+					  {0,0,0,0,0,0,0},
+					  {1,1,1,1,1,1,1},
+					  {0,0,0,0,0,0,0},
+					   };
 	for (int j = 0; j < N; j++)
 	{
 		for (int i = 0; i < N; i++)
 		{
-			block[j][i] = 1;
+			block[j][i] = arr[i][j];
+			//block[i][j] = 1;
 		}
 	}
 }
@@ -20,7 +29,7 @@ int Blocks::Height()
 	return height;
 }
 
-void Blocks:: decrease(int j, int i)
+void Blocks::decrease(int j, int i)
 {
 	--(block[j][i]);
 }
