@@ -4,8 +4,8 @@ Ball::Ball()
 {
 	posX = OX + ((FWIDTH - size) / 2);
 	posY = OY + FHEIGHT - size * 2;
-	horStep = 6;
-	vertStep = -6;
+	horStep = 10;
+	vertStep = -10;
 }
 int Ball::X()
 {
@@ -21,23 +21,83 @@ void Ball::Move(Blocks* blocks, Player player)
 	//столкновение со стенами и блоками
 	if (horStep > 0)
 	{
-		if (posX <= OX + FWIDTH - horStep - size)
+		if (posY >= OY + blocks->Height() * N && posX <= OX + FWIDTH - size - horStep)
 			posX += horStep;
+		else
+		{
+			int i = ((posY +size/2- OY) / blocks->Height());
+			int j = (posX - OX) / blocks->Width();
+			if (posX <= OX + blocks->Width() * (j+1) - size - horStep)
+			{
+				posX += horStep;
+			}
+			else
+			{
+				if ((blocks->value((j + 1), i) != 0) && j < 6)
+				{
+					posX = OX + blocks->Width() * (j+1)-size;
+					horStep *= -1;
+				}
+				else
+				{
+					if (posX <= OX + FWIDTH - size - horStep)
+						posX += horStep;
+					else
+					{
+						posX = OX + FWIDTH - size;
+						horStep *= -1;
+					}
+				}
+			}
+		}
+		/*if (posX <= OX + FWIDTH - horStep - size)
+		{
+			posX += horStep;
+		}
 		else
 		{
 			posX = OX + FWIDTH - size;
 			horStep *= -1;
-		}
+		}*/
 	}
 	else
 	{
-		if (posX >= OX - horStep)
+		if (posY >= OY + blocks->Height() * N - vertStep && posX >= OX - horStep)
+			posX += horStep;
+		else
+		{
+			int i = ((posY +size/2- OY) / blocks->Height());
+			int j = (posX - OX) / blocks->Width();
+			if (posX >= OX + blocks->Width() * (j)-horStep && j>0)
+			{
+				posX += horStep;
+			}
+			else
+			{
+				if ((blocks->value((j - 1), i) != 0) && j>0)
+				{
+					posX = OX + blocks->Width() * j;
+					horStep *= -1;
+				}
+				else
+				{
+					if (posX >= OX - horStep)
+						posX += horStep;
+					else
+					{
+						posX = OX;
+						horStep *= -1;
+					}
+				}
+			}
+		}
+		/*if (posX >= OX - horStep)
 			posX += horStep;
 		else
 		{
 			posX = OX;
 			horStep *= -1;
-		}
+		}*/
 	}
 
 	if (vertStep > 0)
@@ -69,18 +129,18 @@ void Ball::Move(Blocks* blocks, Player player)
 			posY += vertStep;
 		else
 		{
-			int i = ((posY - OY) / blocks->Height()) - 1;
+			int i = ((posY + size / 2 - OY) / blocks->Height());
 			int j = (posX + size / 2 - OX) / blocks->Width();
-			if (posY >= OY + blocks->Height() * (i + 1) - vertStep)
+			if (posY >= OY + blocks->Height() * i - vertStep)
 			{
 				posY += vertStep;
 			}
 			else
 			{
-				if ((blocks->value(j, i) != 0))
+				if ((blocks->value(j, i-1) != 0) && i > 0)
 				{
-					posY = OY + blocks->Height() * (i + 1);
-					blocks->decrease(j, i);
+					posY = OY + blocks->Height() * i;
+					blocks->decrease(j, i-1);
 					vertStep *= -1;
 				}
 				else
@@ -95,37 +155,6 @@ void Ball::Move(Blocks* blocks, Player player)
 				}
 			}
 		}
-
-		//if (posY >= OY + blocks->Height() * N - vertStep)
-		//	posY += vertStep;
-		//else
-		//{
-		//	int j = (posX + size / 2 - OX) / blocks->Width();
-		//	int i = ((posY - OY) / blocks->Height()) - 1;
-		//	if (i > 0)
-		//	{
-		//		if ((blocks->value(j, i) == 0) && (posY >= OY + blocks->Height() * i - vertStep))
-		//		{
-		//			posY += vertStep;
-		//		}
-		//		else
-		//		{
-		//			posY = OY + blocks->Height() * (i + 1);
-		//			vertStep *= -1;
-		//			//blocks->decrease(j, i);
-		//		}
-		//	}
-		//	else
-		//	{
-		//		if (posY >= OY - vertStep)
-		//			posY += vertStep;
-		//		else
-		//		{
-		//			posY = OY;
-		//			vertStep *= -1;
-		//		}
-		//	}
-		//}
 	}
 
 }
